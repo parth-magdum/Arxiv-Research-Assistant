@@ -1,19 +1,32 @@
 # 🔍 ArXiv Research Assistant
 
-A Streamlit-based research assistant that leverages ArXiv papers and LLaMA 3 (via Groq API) for Retrieval-Augmented Generation (RAG) question answering.
+A Streamlit-based research assistant that leverages ArXiv papers and LLaMA 3 (via Groq API) for Retrieval-Augmented Generation (RAG) question answering, with graph-based paper/author exploration.
+
+---
 
 ## Features
 
-- **Fetches and indexes ArXiv papers** on a user-specified topic.
-- **Embeds and stores papers** using FAISS and Sentence Transformers.
-- **Interactive Q&A**: Ask questions and get answers with sources from the indexed papers.
-- **Powered by LLaMA 3** via Groq API.
+- **Fetch & index ArXiv papers** on any topic you choose.
+- **Semantic search & Q&A**: Ask questions and get answers with sources from the indexed papers, powered by LLaMA 3 (Groq API).
+- **Graph database (Neo4j) integration**: Stores metadata and explores relationships between papers, authors, and topics.
+- **FAISS + Sentence Transformers** for fast vector search.
+- **Streamlit UI**: Easy-to-use web interface.
+
+---
 
 ## Demo
 
-![demo-screenshot](demo-screenshot.png) <!-- Add a screenshot if available -->
+![demo-screenshot-1](assets/demo1.png)
+![demo-screenshot-2](assets/demo2.png)
 
-## Setup
+---
+## Try it online
+
+You can try the app online at [arxassistant deployed App](https://share.streamlit.io/yourusername/arxiv-research-assistant/main/app.py).
+
+Or run it locally by following the instructions below.
+
+## Quickstart
 
 ### 1. Clone the repository
 
@@ -28,7 +41,11 @@ It's recommended to use a virtual environment.
 
 ```bash
 python -m venv venv
-.\venv\Scripts\activate # on Windows
+# On Windows:
+.\venv\Scripts\activate
+# On Mac/Linux:
+source venv/bin/activate
+
 pip install -r requirements.txt
 ```
 
@@ -40,19 +57,24 @@ Create a `.env` file in the project root with the following content:
 GROQ_API_KEY=your_groq_api_key
 GROQ_API_BASE=https://api.groq.com/openai/v1
 GROQ_MODEL=llama3-8b-8192
+
+NEO4J_URI=bolt://localhost:7687
+NEO4J_USER=neo4j
+NEO4J_PASSWORD=your_neo4j_password
 ```
 
-Replace `your_groq_api_key` with your actual Groq API key.
+- Replace `your_groq_api_key` with your Groq API key ([get one here](https://console.groq.com/)).
+- Set Neo4j credentials as needed (see [Neo4j docs](https://neo4j.com/docs/)).
 
-### 4. Index ArXiv Papers
+### 4. (Optional) Index ArXiv Papers
 
-Before using the app, run the following to build the FAISS vector database:
+You can pre-index papers by running:
 
 ```bash
 python index_papers.py
 ```
 
-You can edit the query/topic in `index_papers.py` or use the Streamlit UI to re-index.
+Or use the Streamlit UI to index on demand.
 
 ### 5. Run the Streamlit App
 
@@ -62,25 +84,24 @@ streamlit run app.py
 
 Open the provided local URL in your browser.
 
+---
+
 ## Usage
 
 1. **Enter a research topic** and select the number of ArXiv papers to index.
 2. **Ask questions** about the indexed papers.
 3. **View answers and sources** directly in the app.
+4. **Use the sidebar** to search for papers by author (using the Neo4j graph database).
 
-## Try It Online
-
-You can use the app directly without any setup at:  
-**[Your Deployed Streamlit App](https://your-streamlit-app-link)**
-
+---
 
 ## Requirements
 
 - Python 3.9+
 - [Groq API access](https://console.groq.com/)
-- [ArXiv API](https://arxiv.org/help/api/)
+- [Neo4j database](https://neo4j.com/) (local or remote)
 
-
+---
 ## Acknowledgements
 
 - [LangChain](https://github.com/langchain-ai/langchain)
@@ -89,8 +110,12 @@ You can use the app directly without any setup at:
 - [Streamlit](https://streamlit.io/)
 - [Groq](https://groq.com/)
 - [ArXiv](https://arxiv.org/)
+- [Neo4j](https://neo4j.com/)
 
+---
 ## License
 
 MIT License
+
+
 
