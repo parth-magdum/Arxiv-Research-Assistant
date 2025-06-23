@@ -7,3 +7,4 @@ streamlit==1.46.0
 arxiv==2.2.0
 pymupdf==1.26.1
 python-dotenv==1.1.0
+neo4j==5.28.1

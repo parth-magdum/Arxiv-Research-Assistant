@@ -2,7 +2,7 @@ import streamlit as st
 from rag_chain import build_rag_chain
 from rag_loader import load_and_index_arxiv
 
-st.title("🔍 ArXiv Research Assistant (Powered by Arxiv and LLaMA 3)")
+st.title("🔍 ArXiv Research Assistant [(]Powered by Arxiv and LLaMA 3(Groq API)]")
 
 if "indexed" not in st.session_state:
     st.session_state.indexed = False
@@ -19,6 +19,16 @@ if submitted:
         st.success("Done indexing papers.")
         st.session_state.indexed = True
 
+# Sidebar for graph query
+with st.sidebar:
+    st.markdown("### 🔎 Graph Query")
+    author_name = st.text_input("Find papers by author name")
+    if st.button("Search Papers by Author"):
+        from graph_builder import graph  # Use the shared graph instance
+        results = graph.get_papers_by_author(author_name)
+        for r in results:
+            st.markdown(f"- [{r['title']}]({r['url']})")
+
 # Step 2: QA once indexing is done
 if st.session_state.indexed:
     with st.form("qa_form"):
@@ -27,20 +37,19 @@ if st.session_state.indexed:
     if ask_submitted:
         qa_chain = build_rag_chain()
         result = qa_chain({"query": query})
+        st.session_state.qa_result = result  # store in session_state
 
+    # Display if exists
+    if "qa_result" in st.session_state:
+        result = st.session_state.qa_result
         st.markdown("### 📖 Answer")
         st.write(result["result"])
 
         st.markdown("### 📚 Sources")
-        for i, doc in enumerate(result["source_documents"]):
-            title = doc.metadata.get("title", f"Source {i+1}")
+        for idx, doc in enumerate(result["source_documents"]):
+            title = doc.metadata.get("title", "Untitled")
             url = doc.metadata.get("url", "#")
-            # Ensure proper ArXiv link
-            if "arxiv.org" not in url:
-                if url.startswith("/abs/") or url.startswith("abs/"):
-                    url = "https://arxiv.org/" + url.strip("/")
-                elif url.startswith("http") is False:
-                    url = "https://arxiv.org/abs/" + url.strip()
             st.markdown(f"- [{title}]({url})", unsafe_allow_html=True)
+
 
 
