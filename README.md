@@ -8,7 +8,8 @@ A Streamlit-based research assistant that leverages ArXiv papers and LLaMA 3 (vi
 
 - **Fetch & index ArXiv papers** on any topic you choose.
 - **Semantic search & Q&A**: Ask questions and get answers with sources from the indexed papers, powered by LLaMA 3 (Groq API).
-- **Graph database (Neo4j) integration**: Stores metadata and explores relationships between papers, authors, and topics.
+- **Graph database (Neo4j) integration**: Stores metadata and relationships between papers, authors, and topics.
+- - **Search indexed papers** by all or by author using the Neo4j graph database.
 - **FAISS + Sentence Transformers** for fast vector search.
 - **Streamlit UI**: Easy-to-use web interface.
 
@@ -16,16 +17,9 @@ A Streamlit-based research assistant that leverages ArXiv papers and LLaMA 3 (vi
 
 ## Demo
 
-![demo-screenshot-1](assets/demo1.png)
-![demo-screenshot-2](assets/demo2.png)
-
+![demo-screenshot-1](static/demo1.png)
+![demo-screenshot-2](static/demo2.png)
 ---
-## Try it online
-
-You can try the app online at [arxassistant deployed App](https://share.streamlit.io/yourusername/arxiv-research-assistant/main/app.py).
-
-Or run it locally by following the instructions below.
-
 ## Quickstart
 
 ### 1. Clone the repository
@@ -116,6 +110,5 @@ Open the provided local URL in your browser.
 ## License
 
 MIT License
-
 
 

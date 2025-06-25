@@ -32,3 +32,21 @@ class GraphDB:
                 RETURN p.title AS title, p.url AS url
             """, name=author_name)
             return result.data()
+        
+    def get_all_papers(self):
+        with self.driver.session() as session:
+            result = session.run("""
+                MATCH (p:Paper)
+                RETURN p.title AS title, p.url AS url
+                ORDER BY p.title
+            """)
+            return result.data()
+        
+    def get_papers_by_topic(self, topic):
+        with self.driver.session() as session:
+            result = session.run("""
+                MATCH (p:Paper)-[:BELONGS_TO]->(t:Topic {name: $topic})
+                RETURN p.title AS title, p.url AS url
+                ORDER BY p.title
+            """, topic=topic)
+            return result.data()
