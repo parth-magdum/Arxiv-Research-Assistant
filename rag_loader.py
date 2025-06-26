@@ -3,9 +3,8 @@ from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain_community.embeddings import SentenceTransformerEmbeddings
 from langchain_community.vectorstores import FAISS
 from langchain_core.documents import Document
-from graph_builder import graph
 
-def load_and_index_arxiv(query: str, k=5):
+def load_and_index_arxiv(query: str, k=5, graph=None):
     search = arxiv.Search(
         query=query,
         max_results=k,
@@ -27,7 +26,8 @@ def load_and_index_arxiv(query: str, k=5):
 
         # Add paper to Neo4j
         authors_list = [a.strip() for a in metadata["authors"].split(",")]
-        graph.add_paper(metadata["title"], metadata["url"], authors_list, query)  # query used as topic
+        if graph is not None:
+            graph.add_paper(metadata["title"], metadata["url"], authors_list, query)  # query used as topic
 
     # Split and embed for FAISS
     splitter = RecursiveCharacterTextSplitter(chunk_size=500, chunk_overlap=100)

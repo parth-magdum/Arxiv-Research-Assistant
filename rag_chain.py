@@ -2,11 +2,9 @@ from langchain.chains import RetrievalQA
 from langchain_community.vectorstores import FAISS
 from langchain_community.embeddings import SentenceTransformerEmbeddings
 from langchain.prompts import PromptTemplate
-from langchain.chains import LLMChain
-from groq_llm import llm
 from prompt_template import system_prompt
 
-def build_rag_chain():
+def build_rag_chain(llm):
     db = FAISS.load_local(
         "faiss_arxiv",
         SentenceTransformerEmbeddings(model_name="all-MiniLM-L6-v2"),
