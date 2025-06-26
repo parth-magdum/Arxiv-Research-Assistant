@@ -11,6 +11,7 @@ A Streamlit-based research assistant that leverages ArXiv papers and LLaMA 3 (vi
 - **Graph database (Neo4j) integration**: Stores metadata and relationships between papers, authors, and topics.
 - - **Search indexed papers** by all or by author using the Neo4j graph database.
 - **FAISS + Sentence Transformers** for fast vector search.
+- **LangChain**: Used lanchianfor RAG workflows.
 - **Streamlit UI**: Easy-to-use web interface.
 
 ---
