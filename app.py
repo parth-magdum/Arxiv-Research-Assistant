@@ -37,7 +37,7 @@ if "groq_api_key" not in st.session_state:
     - Ask technical questions and get answers with sources.
     - Explore indexed papers and authors using the sidebar.
 
-    You can get a Groq API key [here](https://console.groq.com/).
+    You can get a Groq API key for free [here](https://console.groq.com/).
     """)
     with st.form("credentials_form"):
         st.markdown("#### Enter your credentials to start")
