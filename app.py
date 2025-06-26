@@ -32,11 +32,12 @@ st.markdown("""
 # --- Ask for API keys/passwords before anything else ---
 if "groq_api_key" not in st.session_state:
     st.markdown("""
-    **ArXiv Research Assistant**  
     This app lets you search, index, and chat with ArXiv papers using LLaMA 3 (via Groq API) and explore metadata relationships via Neo4j.  
     - Enter a research topic to fetch and embed relevant ArXiv papers.
     - Ask technical questions and get answers with sources.
     - Explore indexed papers and authors using the sidebar.
+
+    You can get a Groq API key [here](https://console.groq.com/).
     """)
     with st.form("credentials_form"):
         st.markdown("#### Enter your credentials to start")
