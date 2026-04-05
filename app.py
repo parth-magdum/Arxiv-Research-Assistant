@@ -57,6 +57,21 @@ NEO4J_URI = st.secrets["neo4j"]["uri"]
 NEO4J_USER = st.secrets["neo4j"]["user"]
 NEO4J_PASSWORD = st.secrets["neo4j"]["password"]
 
+
+# --- Lazy import and inject credentials into modules ---
+import sys
+import importlib
+
+# Patch graph with secrets
+if "graph" not in st.session_state:
+    graph_builder = importlib.import_module("graph_builder")
+    st.session_state.graph = graph_builder.get_graph(
+        uri=NEO4J_URI,
+        user=NEO4J_USER,
+        password=NEO4J_PASSWORD
+    )
+graph = st.session_state.graph
+
 if "indexed" not in st.session_state:
     st.session_state.indexed = False
 
@@ -70,25 +85,15 @@ if "chat_history" not in st.session_state:
 if "sources" not in st.session_state:
     st.session_state.sources = []  # List of source documents
 
-# --- Lazy import and inject credentials into modules ---
-import sys
 
-# Patch groq_llm.llm with user key
-import importlib
+# Patch llm with user key
 groq_llm = importlib.import_module("groq_llm")
-groq_llm.llm = groq_llm.get_llm(
+llm = groq_llm.get_llm(
     api_key=st.session_state.groq_api_key,
     api_base=GROQ_API_BASE,
     model=GROQ_MODEL
 )
 
-# Patch graph_builder.graph with secrets
-graph_builder = importlib.import_module("graph_builder")
-graph_builder.graph = graph_builder.get_graph(
-    uri=NEO4J_URI,
-    user=NEO4J_USER,
-    password=NEO4J_PASSWORD
-)
 
 # Step 1: User chooses topic
 with st.form("topic_form"):
@@ -101,12 +106,12 @@ if submitted:
         load_and_index_arxiv(
             topic, 
             k=num_papers, 
-            graph=graph_builder.graph
+            graph=graph
         )
         st.success("Done indexing papers.")
         st.session_state.indexed = True
         st.session_state.current_topic = topic
-        st.session_state.current_papers = graph_builder.graph.get_papers_by_topic(topic)
+        st.session_state.current_papers = graph.get_papers_by_topic(topic)
         st.session_state.chat_history = []
         st.session_state.sources = []
 
@@ -126,7 +131,7 @@ with st.sidebar:
     st.markdown("### 🔎Find Indexed Papers by author name")
     author_name = st.text_input("Enter author name here")
     if st.button("Search Papers by Author"):
-        results = graph_builder.graph.get_papers_by_author(author_name)
+        results = graph.get_papers_by_author(author_name)
         for r in results:
             st.markdown(f"- [{r['title']}]({r['url']})")
 
@@ -150,8 +155,8 @@ if st.session_state.indexed:
         query = st.text_input("Ask any question you would like to research the topic from these papers:", key="chat_input")
         ask_submitted = st.form_submit_button("Send")
     if ask_submitted and query.strip():
-        qa_chain = build_rag_chain(llm=groq_llm.llm)
-        result = qa_chain({"query": query})
+        st.session_state.qa_chain = build_rag_chain(llm=llm)
+        result = st.session_state.qa_chain({"query": query})
         st.session_state.chat_history.append((query, result["result"]))
         for doc in result["source_documents"]:
             if doc not in st.session_state.sources:

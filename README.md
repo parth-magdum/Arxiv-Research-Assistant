@@ -112,15 +112,11 @@ Open the provided local URL in your browser.
 - [Neo4j database](https://neo4j.com/) (local or remote) (sample is loaded by default from my db)
 
 ---
-## Acknowledgements
+## TODO
 
-- [LangChain](https://github.com/langchain-ai/langchain)
-- [FAISS](https://github.com/facebookresearch/faiss)
-- [Sentence Transformers](https://www.sbert.net/)
-- [Streamlit](https://streamlit.io/)
-- [Groq](https://groq.com/)
-- [ArXiv](https://arxiv.org/)
-- [Neo4j](https://neo4j.com/)
+- Add more options for different research publishing platforms.
+- Implement GraphRAG to use Neo4j to its full capabilities for better context retrieval.
+- Add chat history and session management.
 
 ---
 ## License
